@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Please confirm your Registration!</h1>
+
+<div class="container-fluid text-center">
+    <form style="max-width: 350px; margin: 0 auto;"
+
+          th:action="@{resend}"
+          th:object="${username}"
+          method="POST">
+
+        <button type="sumbit" class="btn btn-primary">Resend Email</button>
+    </form>
+</div>
+
+
+</body>
+</html>
