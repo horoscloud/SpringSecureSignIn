@@ -1,5 +1,6 @@
 package appuser;
 
+import email.EmailConfiguration;
 import email.EmailSender;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,7 +71,7 @@ public class AppUserService implements UserDetailsService {
             confirmationTokenService.saveConfirmationToken(confirmationToken);
 
 
-            String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+            String link = EmailConfiguration.EMAIL_CONFIRMATION_LINK + token;
             emailSender.send(
                     appUser.getEmail(),
                     buildEmail(appUser.getUsername(), link));
@@ -80,6 +81,10 @@ public class AppUserService implements UserDetailsService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
+
+        if(!EmailConfiguration.EMAIL_CONFIRMATION_REQUIRED){
+            appUser.setEnabled(true);
+        }
 
         appUserRepository.save(appUser);
 
@@ -91,7 +96,7 @@ public class AppUserService implements UserDetailsService {
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = EmailConfiguration.EMAIL_CONFIRMATION_LINK + token;
         emailSender.send(
                 appUser.getEmail(),
                 buildEmail(appUser.getUsername(), link));
